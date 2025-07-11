@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Nama Peserta</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            font-weight: 300;
+        }
+        
+        .groups-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .group {
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .group:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .group-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .group-number {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.4em;
+            margin-right: 15px;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        
+        .group-title {
+            font-size: 1.3em;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .members-list {
+            list-style: none;
+        }
+        
+        .member-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, #f8f9fa, #ffffff);
+            border-radius: 10px;
+            border-left: 4px solid #6366f1;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .member-item:hover {
+            background: linear-gradient(90deg, #e3f2fd, #f3e5f5);
+            transform: translateX(5px);
+            border-left-color: #8b5cf6;
+        }
+        
+        .member-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #6366f1, #8b5cf6);
+            transition: width 0.3s ease;
+        }
+        
+        .member-item:hover::before {
+            width: 100%;
+            opacity: 0.05;
+        }
+        
+        .member-number {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 25px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-right: 12px;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+        
+        .member-name {
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            color: white;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .groups-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+        
+        .decorative-element {
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border-radius: 50%;
+            z-index: -1;
+        }
+        
+        .group {
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Daftar Peserta</h1>
+            <p>Pembagian Kelompok dan Anggota</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-number">5</span>
+                <span class="stat-label">Total Kelompok</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">52</span>
+                <span class="stat-label">Total Peserta</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">10.4</span>
+                <span class="stat-label">Rata-rata per Kelompok</span>
+            </div>
+        </div>
+        
+        <div class="groups-container">
+            <!-- Kelompok I -->
+            <div class="group">
+                <div class="decorative-element"></div>
+                <div class="group-header">
+                    <div class="group-number">I</div>
+                    <div class="group-title">Kelompok I</div>
+                </div>
+                <ul class="members-list">
+                    <li class="member-item">
+                        <span class="member-number">1</span>
+                        <span class="member-name">Farrel Ramadhan Pramana Putra</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">2</span>
+                        <span class="member-name">Azwar Yusuf Hanantowiryo</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">3</span>
+                        <span class="member-name">M. Ivan Febri Pratama</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">4</span>
+                        <span class="member-name">Fatir Ramadhan (bontet)</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">5</span>
+                        <span class="member-name">Sayyida Syahla Annahwalya</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">6</span>
+                        <span class="member-name">Mochamad Aprijal Oktavian Ramadhani Putra</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">7</span>
+                        <span class="member-name">Widyaningrum Zakinah</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">8</span>
+                        <span class="member-name">Syahrul Rhizky Fauzy</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">9</span>
+                        <span class="member-name">Diandra Nasywa Aulia</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">10</span>
+                        <span class="member-name">Uswatun Hasanah Pingkan Wulandari</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">11</span>
+                        <span class="member-name">Siti Salma Narita Dwikantika</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Kelompok II -->
+            <div class="group">
+                <div class="decorative-element"></div>
+                <div class="group-header">
+                    <div class="group-number">II</div>
+                    <div class="group-title">Kelompok II</div>
+                </div>
+                <ul class="members-list">
+                    <li class="member-item">
+                        <span class="member-number">1</span>
+                        <span class="member-name">Moureo Ganjar Putra jaya</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">2</span>
+                        <span class="member-name">Katherine Fara Fairouza</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">3</span>
+                        <span class="member-name">Syafiqah Ghina Thahirah</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">4</span>
+                        <span class="member-name">Raja Trisdan</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">5</span>
+                        <span class="member-name">Achmad Rival Zulkarnaen</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">6</span>
+                        <span class="member-name">Nova Hendra Supriyadi</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">7</span>
+                        <span class="member-name">Najwan Hafizhah</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">8</span>
+                        <span class="member-name">Putri Aliefyanda Rahma Khasanah</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">9</span>
+                        <span class="member-name">Anargya Khairia Latifa (aira)</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">10</span>
+                        <span class="member-name">Elora Arta Saputri</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">11</span>
+                        <span class="member-name">Mas Ayu Aura Bravelly Baby Romago</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Kelompok III -->
+            <div class="group">
+                <div class="decorative-element"></div>
+                <div class="group-header">
+                    <div class="group-number">III</div>
+                    <div class="group-title">Kelompok III</div>
+                </div>
+                <ul class="members-list">
+                    <li class="member-item">
+                        <span class="member-number">1</span>
+                        <span class="member-name">Arbi Satria Helmi</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">2</span>
+                        <span class="member-name">Fauqo Erieka Ardhana</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">3</span>
+                        <span class="member-name">Zakiyya Assayyidah Asy-Syifa</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">4</span>
+                        <span class="member-name">Aulia Putri Ramadhani</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">5</span>
+                        <span class="member-name">Hafiza Nur Fazila</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">6</span>
+                        <span class="member-name">Dena Erinda Anta Negara</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">7</span>
+                        <span class="member-name">Alda Fuadiyah</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">8</span>
+                        <span class="member-name">Sarah Putri Nur Rahmadini</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">9</span>
+                        <span class="member-name">Fawaz Abdilah Aydin</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">10</span>
+                        <span class="member-name">Habibi Putra Pahlawan</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Kelompok IV -->
+            <div class="group">
+                <div class="decorative-element"></div>
+                <div class="group-header">
+                    <div class="group-number">IV</div>
+                    <div class="group-title">Kelompok IV</div>
+                </div>
+                <ul class="members-list">
+                    <li class="member-item">
+                        <span class="member-number">1</span>
+                        <span class="member-name">Risyaf Abil Rizki</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">2</span>
+                        <span class="member-name">Lingga Pradipa Zalni</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">3</span>
+                        <span class="member-name">Ivan Estu Nugraha</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">4</span>
+                        <span class="member-name">Saskia Amelia Putri Irawan</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">5</span>
+                        <span class="member-name">Inas Rafiqah Nisrina</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">6</span>
+                        <span class="member-name">Nabila Benazir N</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">7</span>
+                        <span class="member-name">Auliya Azzahra Ramadhani Wijaya</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">8</span>
+                        <span class="member-name">Kintan Maharani Andiva Putri</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">9</span>
+                        <span class="member-name">Syakira Zalfa Ony Yasmina</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">10</span>
+                        <span class="member-name">Nazwa Salsabila Bilqis</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Kelompok V -->
+            <div class="group">
+                <div class="decorative-element"></div>
+                <div class="group-header">
+                    <div class="group-number">V</div>
+                    <div class="group-title">Kelompok V</div>
+                </div>
+                <ul class="members-list">
+                    <li class="member-item">
+                        <span class="member-number">1</span>
+                        <span class="member-name">Muhammad Yusuf Habibie</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">2</span>
+                        <span class="member-name">Mufidu Ramadhan Sabil</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">3</span>
+                        <span class="member-name">Bhima ilhami Ritonga</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">4</span>
+                        <span class="member-name">Mareta Zahra Kartika</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">5</span>
+                        <span class="member-name">Muhammad Farhan Andi Fajrian</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">6</span>
+                        <span class="member-name">Shafania C Hayuni</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">7</span>
+                        <span class="member-name">Dwiky Maulidan Syahrezky</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">8</span>
+                        <span class="member-name">Aghnia Balqis Ardini</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">9</span>
+                        <span class="member-name">Shiva Zandya Putri</span>
+                    </li>
+                    <li class="member-item">
+                        <span class="member-number">10</span>
+                        <span class="member-name">Guevara Tamtaka Warih Sadana</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
